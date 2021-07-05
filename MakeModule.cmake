@@ -30,4 +30,6 @@ function(make_module)
 	target_link_libraries(${_MODULE_NAME} PUBLIC "${_REQUIRED_LIBS}")
 	target_link_libraries(${_MODULE_NAME} PUBLIC "${_OPTIONAL_LIBS}")
 
+	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
+	add_compile_definitions(LIB_${LIB_NAME})
 endfunction()
