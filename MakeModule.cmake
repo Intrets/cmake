@@ -21,12 +21,6 @@ function(make_module)
 		FILES ${HEADERS_LIST}
 	)
 
-	foreach(LIB ${_REQUIRED_LIBS})
-		if(NOT TARGET ${LIB})
-			message(SEND_ERROR "missing library ${LIB} in ${_MODULE_NAME}")
-		endif()
-	endforeach()
-
 	target_link_libraries(${_MODULE_NAME} PUBLIC "${_REQUIRED_LIBS}")
 	target_link_libraries(${_MODULE_NAME} PUBLIC "${_OPTIONAL_LIBS}")
 
