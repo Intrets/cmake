@@ -4,6 +4,8 @@ function(make_module)
 	set(multiValueArgs MODULE_FILES REQUIRED_LIBS OPTIONAL_LIBS)
 	cmake_parse_arguments("" "${optionalArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
+	message(STATUS "begin making module ${MODULE_NAME}")
+
 	foreach(FILE ${_MODULE_FILES})
 		list(APPEND SOURCES_LIST "${FILE}.cpp")
 		list(APPEND HEADERS_LIST "include/${MODULE_NAME}/${FILE}.h")
@@ -22,8 +24,12 @@ function(make_module)
 	)
 
 	foreach(LIB ${_OPTIONAL_LIBS})
-		if (${LIB}_FOUND)
+		string(TOUPPER ${LIB} LIB_NAME)
+		if (${LIB_NAME}_FOUND)
+			message(STATUS "  found optional lib ${LIB} in ${_MODULE_NAME}")
 			target_link_libraries(${_MODULE_NAME} PUBLIC ${LIB})
+		else()
+			message(STATUS "  did not find optional lib ${LIB} in ${_MODULE_NAME}")
 		endif()
 	endforeach()
 
@@ -31,4 +37,6 @@ function(make_module)
 
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
+
+	message(STATUS "end making module ${_MODULE_NAME}")
 endfunction()
