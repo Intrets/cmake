@@ -21,8 +21,13 @@ function(make_module)
 		FILES ${HEADERS_LIST}
 	)
 
+	foreach(LIB ${_OPTIONAL_LIBS})
+		if (${LIB}_FOUND)
+			target_link_libraries(${_MODULE_NAME} PUBLIC ${LIB})
+		endif()
+	endforeach()
+
 	target_link_libraries(${_MODULE_NAME} PUBLIC "${_REQUIRED_LIBS}")
-	target_link_libraries(${_MODULE_NAME} PUBLIC "${_OPTIONAL_LIBS}")
 
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
