@@ -22,7 +22,7 @@ function(find_physx_part)
 		PATH_SUFFIXES ${PATH_SUFFIX}
 	)
 
-	if (${LIB_NAME})
+	if (${_LIB_NAME})
 		string(LENGTH ${${_LIB_NAME}} LIB_NAME_LENGTH)
 		math(EXPR LIB_NAME_LENGTH "${LIB_NAME_LENGTH} - 4")
 		string(SUBSTRING ${${_LIB_NAME}} 0 ${LIB_NAME_LENGTH} ${_DLL_NAME})
