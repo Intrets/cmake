@@ -1,4 +1,4 @@
-include("${PROJECT_SOURCE_DIR}/cmake/FindStaticLib.cmake")
+include("${CMAKE_SOURCE_DIR}/cmake/FindStaticLib.cmake")
 
 find_static_lib(
 	GLFW3
