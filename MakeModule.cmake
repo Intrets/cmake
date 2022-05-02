@@ -58,11 +58,5 @@ function(make_module)
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
 
-	option(USE_PRECOMPILED_HEADERS "enable/disable precompiled headers" ON)
-
-	if (USE_PRECOMPILED_HEADERS)
-		target_precompile_headers(${_MODULE_NAME} PRIVATE ${HEADERS_LIST})
-	endif()
-
 	message(STATUS "end making module ${_MODULE_NAME}")
 endfunction()
