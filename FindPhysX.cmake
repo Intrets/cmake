@@ -80,6 +80,18 @@ find_physx_part(
 	PART_NAME PhysXExtensions_static_64
 )
 
+find_physx_part(
+	LIB_NAME PHYSX_LIB_COOKING
+	DLL_NAME PHYSX_DLL_COOKING
+	PART_NAME PhysXCooking_64
+)
+
+find_physx_part(
+	LIB_NAME PHYSX_LIB_PVD
+	DLL_NAME PHYSX_DLL_PVD
+	PART_NAME PhysXPvdSDK_static_64
+)
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
 	PhysX
@@ -90,6 +102,8 @@ find_package_handle_standard_args(
 		PHYSX_LIB_COMMON
 		PHYSX_LIB_FOUNDATION
 		PHYSX_LIB_EXTENSIONS
+		PHYSX_LIB_COOKING
+		PHYSX_LIB_PVD
 )
 
 add_library(PhysX SHARED IMPORTED)
@@ -120,8 +134,24 @@ set_target_properties(PhysXExtensions PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
 )
 
+add_library(PhysXCooking SHARED IMPORTED)
+set_target_properties(PhysXCooking PROPERTIES
+	IMPORTED_LOCATION ${PHYSX_DLL_COOKING}
+	IMPORTED_IMPLIB ${PHYSX_LIB_COOKING}
+	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
+)
+
+add_library(PhysXPVD STATIC IMPORTED)
+set_target_properties(PhysXPVD PROPERTIES
+	IMPORTED_LOCATION ${PHYSX_LIB_PVD}
+	IMPORTED_IMPLIB ${PHYSX_LIB_PVD}
+	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
+)
+
 target_link_libraries(PhysX INTERFACE
 	PhysXCommon
 	PhysXFoundation
 	PhysXExtensions
+	PhysXCooking
+	PhysXPVD
 )
