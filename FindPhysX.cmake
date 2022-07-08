@@ -92,6 +92,12 @@ find_physx_part(
 	PART_NAME PhysXPvdSDK_static_64
 )
 
+find_physx_part(
+	LIB_NAME PHYSX_LIB_CHARACTER
+	DLL_NAME PHYSX_DLL_
+	PART_NAME PhysXCharacterKinematic_static_64
+)
+
 include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(
 	PhysX
@@ -104,6 +110,7 @@ find_package_handle_standard_args(
 		PHYSX_LIB_EXTENSIONS
 		PHYSX_LIB_COOKING
 		PHYSX_LIB_PVD
+		PHYSX_LIB_CHARACTER
 )
 
 add_library(PhysX SHARED IMPORTED)
@@ -148,10 +155,18 @@ set_target_properties(PhysXPVD PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
 )
 
+add_library(PhysXCharacter STATIC IMPORTED)
+set_target_properties(PhysXCharacter PROPERTIES
+	IMPORTED_LOCATION ${PHYSX_LIB_CHARACTER}
+	IMPORTED_IMPLIB ${PHYSX_LIB_CHARACTER}
+	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
+)
+
 target_link_libraries(PhysX INTERFACE
 	PhysXCommon
 	PhysXFoundation
 	PhysXExtensions
 	PhysXCooking
 	PhysXPVD
+	PhysXCharacter
 )
