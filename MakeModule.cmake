@@ -2,7 +2,7 @@
 # Copyright (C) 2021 intrets
 
 function(make_module)
-	set(optionalArgs LIBRARY_TYPE)
+	set(optionalArgs LIBRARY_TYPE USE_PRECOMPILED_HEADERS)
 	set(oneValueArgs MODULE_NAME CXX_STANDARD)
 	set(multiValueArgs MODULE_FILES REQUIRED_LIBS OPTIONAL_LIBS)
 	cmake_parse_arguments("" "${optionalArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
@@ -44,6 +44,18 @@ function(make_module)
 
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
+
+	if (NOT ${_USE_PRECOMPILED_HEADERS})
+		if (NOT ${PRECOMPILED_HEADERS_TARGET})
+			message(STATUS "set PRECOMPILED_HEADERS_TARGET to the target containing the precompiled headers before creating a module with make_module")
+		endif()
+
+		target_precompile_headers(
+			${_MODULE_NAME}
+			REUSE_FROM
+				${PRECOMPILED_HEADERS_TARGET}
+		)
+	endif()
 
 	message(STATUS "end making module ${_MODULE_NAME}")
 endfunction()
