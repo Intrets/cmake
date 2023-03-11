@@ -18,8 +18,6 @@ function(make_module)
 		list(APPEND HEADERS_LIST "include/${MODULE_NAME}/${FILE}.h")
 	endforeach()
 
-	message(STATUS "additional files:")
-	message(STATUS "${_ADDITIONAL_FILES}")
 	add_library(${_MODULE_NAME} ${_LIBRARY_TYPE} ${SOURCES_LIST} ${HEADERS_LIST} "${_ADDITIONAL_FILES}")
 	target_compile_features(${_MODULE_NAME} PUBLIC cxx_std_${_CXX_STANDARD})
 
