@@ -4,7 +4,7 @@
 function(make_module)
 	set(optionalArgs LIBRARY_TYPE USE_PRECOMPILED_HEADERS)
 	set(oneValueArgs MODULE_NAME CXX_STANDARD)
-	set(multiValueArgs MODULE_FILES REQUIRED_LIBS OPTIONAL_LIBS)
+	set(multiValueArgs MODULE_FILES REQUIRED_LIBS OPTIONAL_LIBS ADDITIONAL_FILES)
 	cmake_parse_arguments("" "${optionalArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
 	message(STATUS "begin making module ${MODULE_NAME}")
@@ -18,7 +18,9 @@ function(make_module)
 		list(APPEND HEADERS_LIST "include/${MODULE_NAME}/${FILE}.h")
 	endforeach()
 
-	add_library(${_MODULE_NAME} ${_LIBRARY_TYPE} ${SOURCES_LIST} ${HEADERS_LIST})
+	message(STATUS "additional files:")
+	message(STATUS "${_ADDITIONAL_FILES}")
+	add_library(${_MODULE_NAME} ${_LIBRARY_TYPE} ${SOURCES_LIST} ${HEADERS_LIST} "${_ADDITIONAL_FILES}")
 	target_compile_features(${_MODULE_NAME} PUBLIC cxx_std_${_CXX_STANDARD})
 
 	target_include_directories(${_MODULE_NAME} PUBLIC include)
