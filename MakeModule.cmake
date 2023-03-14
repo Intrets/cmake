@@ -2,12 +2,13 @@
 # Copyright (C) 2021 intrets
 
 function(make_module)
-	set(optionalArgs LIBRARY_TYPE USE_PRECOMPILED_HEADERS)
+	set(optionalArgs LIBRARY_TYPE DO_NOT_USE_PRECOMPILED_HEADERS)
 	set(oneValueArgs MODULE_NAME CXX_STANDARD)
 	set(multiValueArgs MODULE_FILES REQUIRED_LIBS OPTIONAL_LIBS ADDITIONAL_FILES)
 	cmake_parse_arguments("" "${optionalArgs}" "${oneValueArgs}" "${multiValueArgs}" ${ARGN})
 
-	message(STATUS "begin making module ${MODULE_NAME}")
+	message(STATUS "------------make_module start------------")
+	message(STATUS "begin making module <${MODULE_NAME}>")
 
 	if (NOT ${_LIBRARY_TYPE})
 		set(_LIBRARY_TYPE STATIC)
@@ -33,10 +34,10 @@ function(make_module)
 	foreach(LIB ${_OPTIONAL_LIBS})
 		string(TOUPPER ${LIB} LIB_NAME)
 		if (${LIB_NAME}_FOUND)
-			message(STATUS "  found optional lib ${LIB} in ${_MODULE_NAME}")
+			message(STATUS "  found optional lib <${LIB}> in <${_MODULE_NAME}>")
 			target_link_libraries(${_MODULE_NAME} PUBLIC ${LIB})
 		else()
-			message(STATUS "  did not find optional lib ${LIB} in ${_MODULE_NAME}")
+			message(STATUS "  did not find optional lib <${LIB}> in <${_MODULE_NAME}>")
 		endif()
 	endforeach()
 
@@ -45,17 +46,17 @@ function(make_module)
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
 
-	if (NOT ${_USE_PRECOMPILED_HEADERS})
-		if (NOT ${PRECOMPILED_HEADERS_TARGET})
-			message(STATUS "set PRECOMPILED_HEADERS_TARGET to the target containing the precompiled headers before creating a module with make_module")
-		endif()
-
+	if (NOT ${_DO_NOT_USE_PRECOMPILED_HEADERS})
+		message(STATUS "setting precompiled headers <${PRECOMPILED_HEADERS_TARGET}> on <${_MODULE_NAME}>")
 		target_precompile_headers(
 			${_MODULE_NAME}
 			REUSE_FROM
 				${PRECOMPILED_HEADERS_TARGET}
 		)
+	else()
+		message(STATUS "not setting precompiled headers on <${_MODULE_NAME}>")
 	endif()
 
-	message(STATUS "end making module ${_MODULE_NAME}")
+	message(STATUS "end making module <${_MODULE_NAME}>")
+	message(STATUS "-------------make_module end-------------")
 endfunction()
