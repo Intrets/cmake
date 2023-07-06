@@ -46,15 +46,17 @@ function(make_module)
 	string(TOUPPER ${_MODULE_NAME} LIB_NAME)
 	target_compile_definitions(${_MODULE_NAME} PUBLIC LIB_${LIB_NAME})
 
-	if (NOT ${_DO_NOT_USE_PRECOMPILED_HEADERS})
-		message(STATUS "setting precompiled headers <${PRECOMPILED_HEADERS_TARGET}> on <${_MODULE_NAME}>")
-		target_precompile_headers(
-			${_MODULE_NAME}
-			REUSE_FROM
-				${PRECOMPILED_HEADERS_TARGET}
-		)
-	else()
-		message(STATUS "not setting precompiled headers on <${_MODULE_NAME}>")
+	if (NOT ${GLOBAL_DO_NOT_USE_PRECOMPILED_HEADERS})
+		if (NOT ${_DO_NOT_USE_PRECOMPILED_HEADERS})
+			message(STATUS "setting precompiled headers <${PRECOMPILED_HEADERS_TARGET}> on <${_MODULE_NAME}>")
+			target_precompile_headers(
+				${_MODULE_NAME}
+				REUSE_FROM
+					${PRECOMPILED_HEADERS_TARGET}
+			)
+		else()
+			message(STATUS "not setting precompiled headers on <${_MODULE_NAME}>")
+		endif()
 	endif()
 
 	message(STATUS "end making module <${_MODULE_NAME}>")
