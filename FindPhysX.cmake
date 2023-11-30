@@ -43,6 +43,10 @@ find_path(
 	PHYSX_SHARED_INCLUDE_DIR foundation/Px.h
 )
 
+find_path(
+	PHYSX_PVD_RUNTIME_INCLUDE_DIR OmniPvdDefines.h
+)
+
 find_physx_part(
 	LIB_NAME PHYSX_LIB
 	DLL_NAME PHYSX_DLL
@@ -74,6 +78,12 @@ find_physx_part(
 )
 
 find_physx_part(
+	LIB_NAME PHYSX_LIB_PVD_RUNTIME
+	DLL_NAME PHYSX_DLL_PVD_RUNTIME
+	PART_NAME PVDRuntime_64
+)
+
+find_physx_part(
 	LIB_NAME PHYSX_LIB_PVD
 	DLL_NAME PHYSX_DLL_PVD
 	PART_NAME PhysXPvdSDK_static_64
@@ -98,6 +108,7 @@ find_package_handle_standard_args(
 		PHYSX_LIB_COOKING
 		PHYSX_LIB_PVD
 		PHYSX_LIB_CHARACTER
+		PHYSX_LIB_PVD_RUNTIME
 )
 
 add_library(PhysX SHARED IMPORTED)
@@ -135,6 +146,13 @@ set_target_properties(PhysXCooking PROPERTIES
 	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_SHARED_INCLUDE_DIR}"
 )
 
+add_library(PVDRuntime SHARED IMPORTED)
+set_target_properties(PVDRuntime PROPERTIES
+	IMPORTED_LOCATION ${PHYSX_DLL_PVD_RUNTIME}
+	IMPORTED_IMPLIB ${PHYSX_LIB_PVD_RUNTIME}
+	INTERFACE_INCLUDE_DIRECTORIES "${PHYSX_INCLUDE_DIR};${PHYSX_PVD_RUNTIME_INCLUDE_DIR}"
+)
+
 add_library(PhysXPVD STATIC IMPORTED)
 set_target_properties(PhysXPVD PROPERTIES
 	IMPORTED_LOCATION ${PHYSX_LIB_PVD}
@@ -156,4 +174,5 @@ target_link_libraries(PhysX INTERFACE
 	PhysXCooking
 	PhysXPVD
 	PhysXCharacter
+	PVDRuntime
 )
