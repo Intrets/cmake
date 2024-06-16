@@ -17,7 +17,10 @@ function(make_module)
 	foreach(FILE ${_MODULE_FILES})
 		list(APPEND SOURCES_LIST "${FILE}.cpp")
 		list(APPEND HEADERS_LIST "include/${MODULE_NAME}/${FILE}.h")
+		list(APPEND ${_MODULE_NAME}_FILES ${FILE})
 	endforeach()
+
+	set(${_MODULE_NAME}_FILES "${${_MODULE_NAME}_FILES}" PARENT_SCOPE)
 
 	add_library(${_MODULE_NAME} ${_LIBRARY_TYPE} ${SOURCES_LIST} ${HEADERS_LIST} "${_ADDITIONAL_FILES}")
 	target_compile_features(${_MODULE_NAME} PUBLIC cxx_std_${_CXX_STANDARD})
