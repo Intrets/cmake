@@ -16,7 +16,7 @@ function(make_module)
 
 	foreach(FILE ${_MODULE_FILES})
 		list(APPEND SOURCES_LIST "${FILE}.cpp")
-		list(APPEND HEADERS_LIST "include/${MODULE_NAME}/${FILE}.h")
+		list(APPEND HEADERS_LIST "${FILE}.h")
 		list(APPEND ${_MODULE_NAME}_FILES ${FILE})
 	endforeach()
 
@@ -25,11 +25,11 @@ function(make_module)
 	add_library(${_MODULE_NAME} ${_LIBRARY_TYPE} ${SOURCES_LIST} ${HEADERS_LIST} "${_ADDITIONAL_FILES}")
 	target_compile_features(${_MODULE_NAME} PUBLIC cxx_std_${_CXX_STANDARD})
 
-	target_include_directories(${_MODULE_NAME} PUBLIC include)
-	target_include_directories(${_MODULE_NAME} PRIVATE include/${_MODULE_NAME})
+	target_include_directories(${_MODULE_NAME} PUBLIC ..)
+	target_include_directories(${_MODULE_NAME} PRIVATE .)
 
 	source_group(
-		TREE "${CMAKE_CURRENT_SOURCE_DIR}/include/${_MODULE_NAME}"
+		TREE "${CMAKE_CURRENT_SOURCE_DIR}/.."
 		PREFIX "Header Files"
 		FILES ${HEADERS_LIST}
 	)
